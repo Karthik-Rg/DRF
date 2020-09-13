@@ -1,0 +1,25 @@
+{% extends 'blog/base.html'%}
+{% block content%}
+{% if request.user.is_superuser %}
+    <a class="btn btn-secondary mt-2 mb-1" href="{% url 'announcements-create' %}"> Announce Something </a>
+{% endif %}
+
+{% for obj in announcement %}
+ <article class="media content-section">
+ <div class="media-body">
+            <div class="article-metadata">
+
+        <h1>{{obj.title}}</h1>
+        <p>{{obj.content}}</p>
+        <p>{{obj.date_announced}}</p>
+
+{% if request.user.is_superuser %}
+    <a class="btn btn-secondary mt-2 mb-1" href="{% url 'announcements-update' obj.id %}"> Update </a>
+    <a class="btn btn-danger mt-2 mb-1" href="{% url 'announcements-delete' obj.id %}"> Delete </a>
+{% endif %}
+
+            </div>
+ </div>
+ </article>
+{% endfor %}
+{%endblock content%}

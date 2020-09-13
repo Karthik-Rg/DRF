@@ -1,0 +1,34 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <form method="GET">
+    {{ filter.form|crispy }}
+    <button class="btn btn-outline-info"  type="submit">Search</button>
+  </form>
+    {% if filter.is_bound %}
+      {% for post in filter.qs %}
+        <article class="media content-section">
+            <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="{% url 'profile-detail' post.author.username %}">{{ post.author.first_name }} {{ post.author.last_name }}</a>
+                {% if post.check_if_edited > 0 %}
+                    <small class="text-muted">Last edited on {{ post.date_edited }} | </small>
+                {% endif %}
+                <small class="text-muted">Posted on {{ post.date_posted|date:"F d , Y" }}</small>
+            </div>
+            <h2><a class="article-title" href="{% url 'post-detail' post.id%}">{{ post.title }}</a></h2>
+            <p class="article-content">{{ post.content }}</p>
+              {% if post.image.url != "/media/post_image" %}
+              {% if post.image.url != "/media/default.jpg" %}
+                <img style="width:100%; height:auto;" src="{{ post.image.url }}">
+              {% endif %}
+              {% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    {% endif %}
+
+
+
+{% endblock %}
